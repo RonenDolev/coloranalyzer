@@ -1,0 +1,624 @@
+/* === Global === */
+body {
+  margin: 0;
+  font-family: "Avenir Next LT Pro Light", sans-serif;
+  background-color: #fff;
+  color: #1a1a1a;
+}
+
+main {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem 3rem;
+  border-top: 2px solid #ccc;
+  min-height: 80vh;
+}
+
+/* === Header === */
+header {
+  background-color: #f2f2f2;
+  border-bottom: 2px solid #ccc;
+  padding: 1rem 2%;
+}
+
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+
+.header-left {
+  width: 44.5%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.header-left h1 {
+  font-size: 3.5rem;
+  font-weight: 300;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.header-left h3,
+.header-controls-title {
+  font-size: 1.5rem;
+  font-weight: 300;
+  margin: 0;
+}
+
+.header-left p {
+  font-size: 18px;
+  font-weight: 300;
+  margin: 0;
+}
+
+.designer {
+  font-size: 1rem; /* keep main size */
+}
+
+.designer-sub {
+  font-size: 70%;   /* reduce size of subtitle */
+  display: inline-block;
+  line-height: 1.4;
+}
+
+.vertical-separator {
+  width: 1px;
+  background-color: #ccc;
+  margin: 0 5px;
+  align-self: stretch;
+}
+
+.header-right {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-left: 2%;
+}
+
+.density-display {
+  margin-top: 10px;
+  padding: 8px;
+  background: #f0f0f0;
+  color: #000;
+  font-weight: bold;
+  border-radius: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.patch-strip {
+  display: flex;
+  gap: 4px;
+  margin-top: 0.5rem;
+  border: 1px solid #ccc;
+  padding: 4px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.patch-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.patch-group::before {
+  content: attr(data-channel);
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.color-patch {
+  width: 30px;
+  height: 20px;
+  border: 1px solid #999;
+}
+
+
+/* === Panels === */
+.panel-left {
+  width: 34%;
+  padding: 0 2% 0 3%;
+  border-right: 1px solid #ddd;
+  background-color: #fff;
+  overflow-y: auto;
+}
+
+.panel-middle {
+  width: 32%;
+  padding: 0 2%;
+  background-color: #fff;
+  overflow-y: auto;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.panel-right {
+  width: 34%;
+  padding: 0 2%;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* === Forms === */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+input[type="number"],
+input[type="text"],
+select {
+  padding: 0.4rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus,
+select:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 3px rgba(74, 144, 226, 0.5);
+}
+
+/* === Buttons (Analyze + Apply Suggestion) === */
+button,
+#apply-suggestion-btn {
+  padding: 0.6rem 1rem;
+  background-color: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  width: 100%;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+button:hover,
+#apply-suggestion-btn:hover {
+  background-color: #357abd;
+}
+/* === Press Color Set Container === */
+#press-color-set-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+/* ליישור תוויות וצ'קבוקס */
+#press-color-set-container label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+/* סידור אופציות מודול וסטנדרט */
+#press-color-set-container select,
+#press-color-set-container input[type="radio"] {
+  margin-left: 4px;
+  margin-right: 12px;
+}
+
+/* טקסט המספרים בפינה הימנית העליונה */
+#density-display {
+  font-family: monospace;
+  font-size: 14px;
+  padding: 8px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  text-align: right;
+}
+/* === Displays === */
+#color-display,
+#measured-color-box {
+  width: 250px;
+  height: 250px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  margin-top: 0.5rem;
+  margin-right: 10px;
+}
+
+/* === Tables === */
+.dot-table,
+#lab-visual table,
+.suggestion-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ccc;
+  margin-top: 1rem;
+  font-family: inherit;
+}
+
+.dot-table th,
+.dot-table td,
+#lab-visual th,
+#lab-visual td,
+.suggestion-table th,
+.suggestion-table td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.dot-table th,
+.suggestion-table th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+  color: #000;
+}
+
+.dot-table td:first-child {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  color: #000;
+}
+
+.dot-table input {
+  width: 60px;
+  padding: 6px;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #bbb;
+  text-align: center;
+}
+
+/* === Calibration Table === */
+.lut-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  background-color: #fff;
+}
+
+.lut-table thead {
+  background-color: #f2f2f2;
+}
+
+.lut-table th,
+.lut-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.lut-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.lut-table tr:hover {
+  background-color: #f0f8ff;
+}
+
+/* רקע אפור לעמודת התיקון */
+.lut-table td.correction-cell {
+  background-color: #eee;
+  font-weight: bold;
+}
+
+
+/* === Visualization Boxes === */
+#lab-results,
+#cmykovg-correction,
+#lab-visual {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+canvas#lab-chart {
+  margin-top: 1rem;
+  max-width: 100%;
+}
+
+/* === Dot Gain Chart === */
+#dot-gain-chart {
+  width: 100%;
+  max-width: 100%;
+  height: 350px !important;
+  max-height: 550px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  margin-top: 1rem;
+  box-sizing: border-box;
+}
+
+/* === Delete Button === */
+button.delete-row-btn {
+  background: none;
+  border: none;
+  color: #900;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+
+button.delete-row-btn:hover {
+  color: #c00;
+}
+
+.channel-C {
+  background-color: cyan;
+  color: black;
+  font-weight: bold;
+}
+.channel-M {
+  background-color: magenta;
+  color: black;
+  font-weight: bold;
+}
+.channel-Y {
+  background-color: yellow;
+  color: black;
+  font-weight: bold;
+}
+.channel-K {
+  background-color: black;
+  color: white;
+  font-weight: bold;
+}
+
+
+/* === Dot Gain Table Alignment Fix === */
+.dot-table td {
+  vertical-align: middle;
+}
+
+
+/* === Delta E Box === */
+.delta-box {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  font-weight: bold;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f7f7f7;
+}
+
+.delta-box.green {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.delta-box.orange {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.delta-box.red {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+<style>
+#icc-lut-results {
+  position: relative;
+  margin: 32px auto;           /* מרכז את הפאנל */
+  width: 850px;                /* קובע רוחב מקסימלי */
+  max-height: 85vh;            /* גובה מקסימלי מהחלון */
+  overflow-y: auto;            /* גלילה פנימית */
+  background: #fff;            /* לבן */
+  border-radius: 12px;
+  box-shadow: 0 2px 14px #0002;
+  padding: 32px 16px 32px 16px;
+  box-sizing: border-box;
+ #patches-measurement-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.measurement-block {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.measurement-block .label {
+  width: 60px;
+}
+
+.measurement-block input.lab-input {
+  width: 50px;
+  text-align: center;
+  margin: 0;
+  padding: 4px;
+  font-size: 0.75rem;
+}
+
+.measurement-block .delta-box {
+  width: 60px;
+  text-align: center;
+  padding: 4px;
+   font-size: var(--delta-font-size, 0.75rem);
+}
+
+#cmyk-correction-box input {
+  border: 1px solid #ccc;
+  padding: 4px;
+  text-align: center;
+  font-weight: bold;
+  background-color: #f9f9f9;
+}
+.measure-col input.lab-input {
+  width: 50px;
+  text-align: center;
+  margin: 0 2px;
+}
+
+.measurement-block {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.lab-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-weight: normal; /* לא בולד */
+}
+.lab-header div {
+  text-align: center;
+}
+
+.cmyk-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 6px;
+}
+
+.cmyk-row-label {
+  width: 20px;
+  font-weight: bold;
+}
+
+.cmyk-patch {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #999;
+  box-sizing: border-box;
+}
+
+.cmyk-header {
+  display: flex;
+  margin-left: 20px;
+  margin-bottom: 4px;
+  gap: 6px;
+}
+
+.cmyk-header div {
+  width: 40px;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+input[type="number"] {
+  width: 60px;
+  padding: 6px;
+  height: 32px;  /* הוסף במידת הצורך */
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.panel-middle {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.dot-table input {
+  width: 60px;
+}
+</style>
+
+/* === Suggestions === */
+#suggestion-form label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.4rem 0.6rem;
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
+#suggestion-form input[type="radio"] {
+  transform: scale(1.3);
+  margin-right: 0.4rem;
+}
+
+.suggestion-good {
+  background: #e6ffe6;
+  border: 1px solid #88cc88;
+  padding: 0.5rem;
+  margin: 0.3rem 0;
+}
+
+.suggestion-bad {
+  background: #ffe6e6;
+  border: 1px solid #cc8888;
+  padding: 0.5rem;
+  margin: 0.3rem 0;
+}
+
+/* === CMYK Line Highlight === */
+#selected-cmyk-line {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  font-weight: bold;
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* === Suggestion Table Coloring === */
+.suggestion-table .green {
+  background-color: #d4edda;
+  color: #155724;
+  font-weight: bold;
+}
+
+.suggestion-table .orange {
+  background-color: #fff3cd;
+  color: #856404;
+  font-weight: bold;
+}
+
+.suggestion-table .red {
+  background-color: #f8d7da;
+  color: #721c24;
+  font-weight: bold;
+}
+
+/* === Improvement Note === */
+.improvement-note {
+  font-style: italic;
+  font-size: 0.85rem;
+  background: #f4f4f4;
+  color: #333;
+}
+
+/* === Pantone Form Specific === */
+form#pantone-form button[type="submit"],
+#apply-suggestion-btn {
+  width: 100%;
+  min-width: 120px;
+}
+
+#cmyk-patch-row {
+  min-width: 250px;
+}

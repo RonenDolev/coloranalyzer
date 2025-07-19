@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Color Analysis for HP Presses</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-left">
+      <h1>Color Analysis</h1>
+      <h3>Color Analysis for Optimal Printing</h3><br/><br/>
+      <p class="designer">
+        <strong>Ronen Dolev</strong><br/>
+        <span class="designer-sub">EMEA Color Expert<br/>dolev@hp.com</span>
+      </p>
+    </div>
+    <div class="vertical-separator"></div>
+    <div class="header-right">
+      <h3 class="header-controls-title">Press color set, module and standard</h3>
+      <div class="inks">
+        <label><input type="checkbox" name="ink" value="C" checked /> C</label>
+        <label><input type="checkbox" name="ink" value="M" checked /> M</label>
+        <label><input type="checkbox" name="ink" value="Y" checked /> Y</label>
+        <label><input type="checkbox" name="ink" value="K" checked /> K</label>
+        <label><input type="checkbox" name="ink" value="O" /> O</label>
+        <label><input type="checkbox" name="ink" value="V" /> V</label>
+        <label><input type="checkbox" name="ink" value="G" /> G</label>
+      </div>
+      <div class="modes">
+        <label><input type="radio" name="mode" value="M0" /> M0</label>
+        <label><input type="radio" name="mode" value="M1" checked /> M1</label>
+        <label><input type="radio" name="mode" value="M2" /> M2</label>
+        <label><input type="radio" name="mode" value="M3" /> M3</label>
+      </div>
+      
+      <!-- שני הסלקטים בשורה אחת -->
+      <div class="standards-row">
+        <select name="fogra-standard">
+          <option value="none">No Standard</option>
+          <option value="fogra39">Fogra 39</option>
+          <option value="fogra51">Fogra 51</option>
+          <option value="fogra52">Fogra 52</option>
+          <option value="ECGAlliance">Alliance ECG</option>
+          <option value="APTEC_PC10_CardBoard_2023_v1.icc">APTEC_PC10_CardBoard_2023_v1.icc</option>
+          <option value="APTEC_PC11_CCNB_2023_v1.icc">APTEC_PC11_CCNB_2023_v1.icc</option>
+          <option value="Coated_Fogra39L_VIGC_260.icc">Coated_Fogra39L_VIGC_260.icc</option>
+          <option value="GRACoL2006_Coated1v2.icc">GRACoL2006_Coated1v2.icc</option>
+          <option value="GRACoL2013_CRPC6.icc">GRACoL2013_CRPC6.icc</option>
+          <option value="PSOcoated_v3.icc">PSOcoated_v3.icc</option>
+          <option value="PSOcoated_v3 (Japan).icc">PSOcoated_v3 (Japan).icc</option>
+          <option value="PSOsc-b_paper_v3_FOGRA54.icc">PSOsc-b_paper_v3_FOGRA54.icc</option>
+          <option value="PSOuncoated_v3_FOGRA52.icc">PSOuncoated_v3_FOGRA52.icc</option>
+          <option value="SWOP2006_Coated3v2.icc">SWOP2006_Coated3v2.icc</option>
+          <option value="SWOP2006_Coated5v2.icc">SWOP2006_Coated5v2.icc</option>
+          <option value="Uncoated_Fogra47L_VIGC_300.icc">Uncoated_Fogra47L_VIGC_300.icc</option>
+        </select>
+        <select name="paper-gloss" id="gloss-select">
+          <option value="gloss">Gloss</option>
+          <option value="semimatte">Semi-matte</option>
+          <option value="matte">Matte</option>
+        </select>
+      </div>
+
+      <!-- ערכי הדנסיטי יהיו מתחת לסלקטים, יופיעו כאן -->
+      <div id="density-values" class="density-display"></div>
+    </div>
+  </div>
+</header>
+
+
+<main>
+  <section class="panel-left">
+    <h2>Dot Gain Analysis</h2>
+    <form id="dot-gain-form">
+      <fieldset>
+        <legend>Existing Sample (C, M, Y, K)</legend>
+        <table class="dot-table" id="existing-sample-table">
+          <thead><tr><th>%</th><th>C</th><th>M</th><th>Y</th><th>K</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>40%</td><td><input name="c_old_40" type="number" /></td><td><input name="m_old_40" type="number" /></td><td><input name="y_old_40" type="number" /></td><td><input name="k_old_40" type="number" /></td><td></td></tr>
+            <tr><td>80%</td><td><input name="c_old_80" type="number" /></td><td><input name="m_old_80" type="number" /></td><td><input name="y_old_80" type="number" /></td><td><input name="k_old_80" type="number" /></td><td></td></tr>
+          </tbody>
+        </table>
+      </fieldset>
+      <fieldset>
+        <legend>Additional Points</legend>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <label>%:</label>
+          <input type="number" id="new-percentage" min="1" max="99" step="1" />
+          <button type="button" id="add-point-btn">Add</button>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>New Print Sample (C, M, Y, K)</legend>
+        <table class="dot-table" id="new-sample-table">
+          <thead><tr><th>%</th><th>C</th><th>M</th><th>Y</th><th>K</th></tr></thead>
+          <tbody>
+            <tr><td>40%</td><td><input name="c_new_40" type="number" /></td><td><input name="m_new_40" type="number" /></td><td><input name="y_new_40" type="number" /></td><td><input name="k_new_40" type="number" /></td></tr>
+            <tr><td>80%</td><td><input name="c_new_80" type="number" /></td><td><input name="m_new_80" type="number" /></td><td><input name="y_new_80" type="number" /></td><td><input name="k_new_80" type="number" /></td></tr>
+          </tbody>
+        </table>
+      </fieldset>
+      <div style="display: flex; align-items: center; gap: 1rem; margin-top: 1em;">
+        <button type="submit">Calculate Dot Gain</button>
+        <label for="channel-select">Select Channel:</label>
+        <select id="channel-select">
+          <option value="all">All</option>
+          <option value="c">Cyan</option>
+          <option value="m">Magenta</option>
+          <option value="y">Yellow</option>
+          <option value="k">Black</option>
+        </select>
+      </div>
+      <canvas id="dot-gain-chart" width="600" height="350"></canvas>
+      <div id="dot-gain-results"></div>
+    </form>
+  </section>
+
+<section class="panel-middle" id="panel-middle">
+  <h2 style="margin: 0;">LUT Correction</h2>
+  
+  <div style="display: flex; align-items: center; flex-wrap: wrap; margin-bottom: 10px;">
+    <span id="selected-standard-display" style="font-weight: bold;"></span>
+    <span style="font-size: 0.85em; margin-left: 24px;">
+      <b>Download Measurement Layout:</b>
+      <a href="Test_layout_500x350.pdf" download style="margin-left: 10px;">Test Layout 500x350</a>
+      <a href="Test_layout_700x500.pdf" download style="margin-left: 10px;">Test Layout 700x500</a>
+      <a href="Test_layout_700x1000.pdf" download style="margin-left: 10px;">Test Layout 700x1000</a>
+    </span>
+  </div>  <div id="selected-standard-display" style="font-weight: bold; margin-bottom: 10px;"></div>
+  <div id="manual-cmyk-inputs"></div>
+  <div id="manual-gray-inputs"></div><br/>
+
+  <button id="calc-lut-btn" style="width: 30%;">Recalculate Corrections</button>
+   <div id="icc-lut-results-standard"></div>
+   <div id="icc-lut-results"></div>        
+  <div id="dotgain-graph-section">
+    <label for="dotgain-channel-select" style="margin-left:16px;">Select Channel:</label>
+    <select id="dotgain-channel-select">
+      <option value="all">All</option>
+      <option value="C">Cyan</option>
+      <option value="M">Magenta</option>
+      <option value="Y">Yellow</option>
+      <option value="K">Black</option>
+    </select>
+    <canvas id="dotgain-graph" width="500" height="350"></canvas>
+  </div>
+</section>
+
+
+<section class="panel-right">
+  <h2>Pantone Color Analysis</h2>
+  <form id="pantone-form">
+  
+    <label for="pantone-select">Select Pantone:</label>
+<div id="pantone-list-container" style="max-height: 200px; overflow-y: auto; padding: 4px;">
+  <select id="pantone-select" name="pantone" style="width: 30%; outline: none;"></select>
+</div>
+
+    <!-- הצגת צבעים -->
+    <div style="display: flex; gap: 1rem; margin-top: 20px;">
+      <div style="text-align: center;">
+        <div id="color-display" style="border: 1px solid #999; margin-bottom: 0.5rem;"></div>
+        <div style="font-size: 0.8rem;">Target</div>
+      </div>
+      <div style="text-align: center;">
+        <div id="measured-color-box" style="border: 1px solid #999; margin-bottom: 0.5rem;"></div>
+        <div style="font-size: 0.8rem;">Measured</div>
+      </div>
+    </div>
+
+<!-- ערכי LAB ו-CMYK קיימים -->
+<fieldset style="margin-top: 20px;">
+  <legend>Existing LAB Values</legend>
+  <div style="display: flex; flex-direction: column; gap: 1rem;">
+
+    <!-- ערכי LAB -->
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+      <label>L: <input type="number" name="lab_l" step="0.01" style="width: 70px;"></label>
+      <label>A: <input type="number" name="lab_a" step="0.01" style="width: 70px;"></label>
+      <label>B: <input type="number" name="lab_b" step="0.01" style="width: 70px;"></label>
+    </div>
+
+    <!-- ערכי CMYK -->
+    <div>Existing CMYK</div>
+    <div style="display: flex; gap: 1rem; flex-wrap: nowrap;">
+      <label>C: <input type="number" name="existing_c" step="0.01" style="width: 70px;"></label>
+      <label>M: <input type="number" name="existing_m" step="0.01" style="width: 70px;"></label>
+      <label>Y: <input type="number" name="existing_y" step="0.01" style="width: 70px;"></label>
+      <label>K: <input type="number" name="existing_k" step="0.01" style="width: 70px;"></label>
+    </div>
+
+    <!-- כפתור ניתוח -->
+    <button type="submit" style="width: 30%; margin-top: 10px;">Analyze</button>
+  </div>
+</fieldset>
+
+    
+<!-- Delta E Box -->
+<div id="delta-result" class="delta-box" style="width: fit-content; min-width: 280px;"></div>
+
+<!-- Measured LAB -->
+<fieldset style="margin-top: 1rem;">
+  <legend>Measured LAB</legend>
+  <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+    <label>L: <input type="number" name="measured_lab_l" step="0.01" inputmode="decimal" style="width: 70px;"></label>
+    <label>A: <input type="number" name="measured_lab_a" step="0.01" inputmode="decimal" style="width: 70px;"></label>
+    <label>B: <input type="number" name="measured_lab_b" step="0.01" inputmode="decimal" style="width: 70px;"></label>
+  </div>
+</fieldset>
+
+<!-- כפתור Apply Suggestion -->
+<button id="apply-suggestion-btn" style="width: 30%;">Apply Suggestion</button>
+
+<!-- Smart Suggestions Table -->
+<div id="cmykovg-suggestions" style="margin-top: 1rem;">
+  <h4>Smart Suggestions:</h4>
+  <table class="suggestion-table">
+    <thead>
+  <tr>
+    <th>Select</th>
+  <th>Suggestion</th>
+   <th>Chennels</th>
+   <th>Measured Values</th>
+  <th>LAB values</th>
+  <th>Δ correction chennels</th>
+  <th>ΔE</th>
+  </tr>
+</thead>
+    <tbody id="suggestion-table-body">
+      <!-- שורות ההצעות יתווספו כאן -->
+    </tbody>
+  </table>
+</div>
+
+
+
+<!-- Measured CMYKOVG -->
+<fieldset style="margin-top: 1rem;">
+  <legend>CMYKOVG values for printing ΔE correction</legend>
+  <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+    <label>C: <input type="number" name="measured_c" style="width: 70px;"></label>
+    <label>M: <input type="number" name="measured_m" style="width: 70px;"></label>
+    <label>Y: <input type="number" name="measured_y" style="width: 70px;"></label>
+    <label>K: <input type="number" name="measured_k" style="width: 70px;"></label>
+    <label>O: <input type="number" name="measured_o" style="width: 70px;"></label>
+    <label>V: <input type="number" name="measured_v" style="width: 70px;"></label>
+    <label>G: <input type="number" name="measured_g" style="width: 70px;"></label>
+  </div>
+</fieldset>
+
+<!-- תיבות פלט סופיות -->
+<div id="lab-results" style="margin-top: 1rem;"></div>
+<div id="cmykovg-correction"></div>
+<canvas id="lab-chart" width="400" height="200" style="margin-top: 1rem;"></canvas>
+ 
+
+
+</section>
+
+
+<script type="module" src="./densities.js"></script>
+<script type="module" src="./script.js"></script>
+<script type="module" src="./script_center.js"></script>
+<script type="module" src="./script2.js"></script>
+<script type="module" src="./listeners.js"></script>
+<script type="module">
+  window.addEventListener('DOMContentLoaded', () => {
+    // ✅ הצגת הפאנל האמצעי תמיד
+    const panelMiddle = document.getElementById('panel-middle');
+    if (panelMiddle) {
+      panelMiddle.style.display = 'block';
+    }
+
+    // קריאות אתחול קיימות
+    window.updateDensityDisplay?.();
+    window.loadPantoneOptions?.();
+
+    // שינוי ידני של מדידת LAB
+    ['measured_lab_l', 'measured_lab_a', 'measured_lab_b'].forEach(name => {
+      const input = document.querySelector(`input[name="${name}"]`);
+      if (input) {
+        input.addEventListener('input', window.handleMeasuredLabChange);
+      }
+    });
+window.renderCMYKandGrayInputs?.();
+  
+    // ✅ טיפול בשליחת טופס LAB
+    const form = document.getElementById('pantone-form');
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const wasEditedManually = window.cmykEditedManually;
+        const wasLoadedFromDB = window.cmykLoadedFromDB;
+
+        if (wasEditedManually || wasLoadedFromDB || window.preventCmykReset) {
+          console.log('⏭️ מדלג על חישוב CMYK – עריכה ידנית או טעינה מה־DB');
+          return;
+        }
+
+        const l = parseFloat(document.querySelector('input[name="lab_l"]')?.value);
+        const a = parseFloat(document.querySelector('input[name="lab_a"]')?.value);
+        const b = parseFloat(document.querySelector('input[name="lab_b"]')?.value);
+
+        const c = parseFloat(document.querySelector('input[name="existing_c"]')?.value) || 0;
+        const m = parseFloat(document.querySelector('input[name="existing_m"]')?.value) || 0;
+        const y = parseFloat(document.querySelector('input[name="existing_y"]')?.value) || 0;
+        const k = parseFloat(document.querySelector('input[name="existing_k"]')?.value) || 0;
+
+        let targetLab;
+
+        if (!isNaN(l) && !isNaN(a) && !isNaN(b)) {
+          // הזנה ידנית של LAB
+          targetLab = { L: l, A: a, B: b };
+          console.log('🔍 Analyze triggered with LAB:', targetLab);
+
+          const rgb = window.labToRgb(targetLab);
+          const cmyk = window.rgbToCmyk(rgb);
+
+          if (cmyk && typeof cmyk === 'object') {
+            console.log('🧮 Calculated CMYK from LAB:', cmyk);
+            ['c', 'm', 'y', 'k'].forEach(ch => {
+              const val = cmyk[ch.toUpperCase()];
+              const input = document.querySelector(`input[name="existing_${ch}"]`);
+              if (input) {
+                input.value = isFinite(val) ? +(val * 100).toFixed(1) : '';
+                console.log(`✍️ Set existing_${ch} to`, input.value);
+              }
+            });
+          }
+        } else {
+          // הזנה ידנית של CMYK
+          const rgb = window.cmykToRgb({ C: c, M: m, Y: y, K: k });
+          targetLab = window.rgbToLab(rgb);
+          console.log('🎨 Calculated LAB from CMYK:', targetLab);
+
+          ['l', 'a', 'b'].forEach(ch => {
+            const val = targetLab[ch.toUpperCase()];
+            const input = document.querySelector(`input[name="lab_${ch}"]`);
+            if (input) {
+              input.value = isFinite(val) ? +val.toFixed(2) : '';
+              console.log(`✍️ Set lab_${ch} to`, input.value);
+            } else {
+              console.warn(`⚠️ Input lab_${ch} not found`);
+            }
+          });
+        }
+
+        // ✅ עדכון תמידי של ΔE וצבעים
+        const measuredLab = {
+          L: parseFloat(document.querySelector('input[name="measured_lab_l"]').value),
+          A: parseFloat(document.querySelector('input[name="measured_lab_a"]').value),
+          B: parseFloat(document.querySelector('input[name="measured_lab_b"]').value)
+        };
+        window.updateDeltaE2000?.(targetLab, measuredLab);
+      });
+    }
+
+    // ✅ כפתור Apply Suggestion
+    const applyBtn = document.getElementById('apply-suggestion-btn');
+    if (applyBtn) {
+      applyBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // חשוב כדי למנוע ריענון טופס
+        window.handleApplySuggestionClick();
+      });
+    }
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>

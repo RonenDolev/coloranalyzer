@@ -1,0 +1,94 @@
+<section id="left-panel">
+  <h2>Dot Gain Analysis</h2>
+
+  <form id="dot-gain-form">
+
+    <!-- Existing Sample -->
+    <fieldset>
+      <legend>Existing Sample (C, M, Y, K)</legend>
+      <table class="dot-table" id="existing-sample-table">
+        <thead>
+          <tr>
+            <th>%</th><th>C</th><th>M</th><th>Y</th><th>K</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>40%</td>
+            <td><input type="number" name="c_old_40" /></td>
+            <td><input type="number" name="m_old_40" /></td>
+            <td><input type="number" name="y_old_40" /></td>
+            <td><input type="number" name="k_old_40" /></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>80%</td>
+            <td><input type="number" name="c_old_80" /></td>
+            <td><input type="number" name="m_old_80" /></td>
+            <td><input type="number" name="y_old_80" /></td>
+            <td><input type="number" name="k_old_80" /></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </fieldset>
+
+    <!-- Add Point Control -->
+    <fieldset>
+      <legend>Additional Points</legend>
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 1rem;">
+        <label for="new-percentage">Enter %:</label>
+        <input id="new-percentage" type="number" min="1" max="99" step="1" />
+        <button type="button" id="add-point-btn">Add</button>
+      </div>
+    </fieldset>
+
+    <!-- New Print Sample -->
+    <fieldset>
+      <legend>New Print Sample (C, M, Y, K)</legend>
+      <table class="dot-table" id="new-sample-table">
+        <thead>
+          <tr>
+            <th>%</th><th>C</th><th>M</th><th>Y</th><th>K</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>40%</td>
+            <td><input type="number" name="c_new_40" /></td>
+            <td><input type="number" name="m_new_40" /></td>
+            <td><input type="number" name="y_new_40" /></td>
+            <td><input type="number" name="k_new_40" /></td>
+          </tr>
+          <tr>
+            <td>80%</td>
+            <td><input type="number" name="c_new_80" /></td>
+            <td><input type="number" name="m_new_80" /></td>
+            <td><input type="number" name="y_new_80" /></td>
+            <td><input type="number" name="k_new_80" /></td>
+          </tr>
+        </tbody>
+      </table>
+    </fieldset>
+
+    <!-- Controls -->
+    <div style="margin-top: 1em;">
+      <button type="submit">Calculate Dot Gain</button>
+      <label for="channel-select" style="margin-left: 1em;">Select Channel:</label>
+      <select id="channel-select">
+        <option value="all">All</option>
+        <option value="c">Cyan</option>
+        <option value="m">Magenta</option>
+        <option value="y">Yellow</option>
+        <option value="k">Black</option>
+      </select>
+    </div>
+  </form>
+
+  <!-- Chart and Results -->
+  <canvas id="dot-gain-chart" width="600" height="350"></canvas>
+  <div id="dot-gain-results"></div>
+
+  <!-- LUT Results -->
+  <div id="lut-results" style="margin-top: 2rem;"></div>
+</section>
